@@ -3,23 +3,23 @@ class Roomba {
   constructor(data){
     this.parseData(data)
     this.createRoom()
-    this.printRoom()
-    this.addHoover()
+    this.placeHoover(this.hooverCoords)
     this.addDirt()
     this.printRoom()
-    this.printData()
+    this.cleanRoom()
+    // this.printRoom()
   }
 
   createRoom(){
     const { x, y } = this.parseCoordArray(this.roomDimensions)
-    this.room = new Array()//.fill(new Array(y).fill(0))
+    this.room = new Array()
     for (var i = 0; i < x; i++) {
       this.room[i] = new Array(y).fill(0)
     }
   }
 
-  addHoover(){
-    const { x, y } = this.parseCoordArray(this.hooverCoords)
+  placeHoover(coords){
+    const { x, y } = this.parseCoordArray(coords)
     this.room[y][x] = "H"
   }
 
@@ -43,7 +43,7 @@ class Roomba {
     this.roomDimensions = dataArr.shift().split(" "),
     this.hooverCoords = dataArr.shift().split(" "),
     this.dirtPatches = dataArr.filter(set => {return /\d/.test(set)}),
-    this.directions = dataArr.filter(set => {return /[NESW]/.test(set)})
+    this.directions = dataArr.filter(set => {return /[NESW]/.test(set)})[0]
   }
 
   printData() {
@@ -62,6 +62,37 @@ class Roomba {
     console.log(`0 || ${this.room[0][0]} | ${this.room[0][1]} | ${this.room[0][2]} | ${this.room[0][3]} | ${this.room[0][4]} |`)
     console.log(`     0   1   2   3   4`)
   }
+
+  cleanRoom() {
+    this.directions.split("").forEach(direction => this.moveHoover(direction))
+  }
+
+  moveHoover(direction) {
+    let y = this.room.findIndex(yRow => yRow.includes("H"))
+    let x = this.room[y].findIndex(xPoint => xPoint === "H")
+    this.replaceHoover({ x, y })
+    console.log(x, y)
+    switch(direction){
+      case "N": y += 1; break;
+      case "E": x += 1; break;
+      case "S": y -= 1; break;
+      case "W": x -= 1; break;
+    }
+    this.placeHoover([x, y])
+    this.printRoom()
+  }
+
+  replaceHoover({ x, y }){
+    this.room[y][x] = 0;
+  }
+
+  // printResults(){
+  //   const hooverLocation = findRoomba()
+  //   const cleanCount = this.cleanCount
+  //   console.log(hooverLocation)
+  //   console.log(cleanCount)
+  // }
+
 }
 
 module.exports = {
