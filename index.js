@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-'use strict';
+// 'use strict';
 
 var fs = require('fs');
-const Hoover = require('./hoover.js')
+const Tools = require('./hoover.js')
 
 fs.readFile('input.txt', 'utf8', function(err, data) {
     if (err) throw err;
-    Hoover.hooverRoom(data);
+    const roombot = new Tools.Roomba(data)
+    roombot.printData()
 });
