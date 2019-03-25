@@ -4,61 +4,40 @@ class Roomba {
     this.parseData(data)
     this.createRoom()
     this.printRoom()
-    // this.populateRoom()
+    this.addHoover()
+    this.addDirt()
+    this.printRoom()
     this.printData()
   }
 
   createRoom(){
-    const { x, y } = this.getCoordArray(this.roomDimensions)
-    this.room = new Array(x).fill(new Array(y).fill(0))
+    const { x, y } = this.parseCoordArray(this.roomDimensions)
+    this.room = new Array()//.fill(new Array(y).fill(0))
+    for (var i = 0; i < x; i++) {
+      this.room[i] = new Array(y).fill(0)
+    }
   }
 
-  // populateRoom(){
-  //   this.hooverCoords
-  // }
-
-  getCoordArray(coords){
-    return {x: parseInt(coords[0]), y: parseInt(coords[1])}
+  addHoover(){
+    const { x, y } = this.parseCoordArray(this.hooverCoords)
+    this.room[y][x] = "H"
   }
 
-  //
-  // const room = [
-  //   [0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0]
-  // ]
+  addDirt(){
+    this.dirtPatches.forEach(d => {
+      const dirtCoords = d.split(" ")
+      const { x, y } = this.parseCoordArray(dirtCoords)
+      this.room[y][x] = "D"
+    })
+  }
 
+  parseCoordArray(coords){
+    console.log(coords)
+    let x = parseInt(coords[0])
+    let y = parseInt(coords[1]) === "0" ? 0 : parseInt(coords[1])
+    return { x, y }
+  }
 
-
-   // set room grid
-  // 4 || 0 | 0 | 0 | 0 | 0 |
-  // 3 || 0 | 0 | 0 | 0 | 0 |
-  // 2 || 0 | 0 | 0 | 0 | 0 |
-  // 1 || 0 | 0 | 0 | 0 | 0 |
-  // 0 || 0 | 0 | 0 | 0 | 0 |
-  //      0   1   2   3   4
-  //
-  //  // set hoover position
-  // 4 || 0 | 0 | 0 | 0 | 0 |
-  // 3 || 0 | 0 | 0 | 0 | 0 |
-  // 2 || 0 | H | 0 | 0 | 0 |
-  // 1 || 0 | 0 | 0 | 0 | 0 |
-  // 0 || 0 | 0 | 0 | 0 | 0 |
-  //      0   1   2   3   4
-  //
-  // // set dirt position
-  // 4 || 0 | 0 | 0 | 0 | 0 |
-  // 3 || 0 | 0 | D | 0 | 0 |
-  // 2 || 0 | H | D | 0 | 0 |
-  // 1 || 0 | 0 | 0 | 0 | 0 |
-  // 0 || 0 | D | 0 | 0 | 0 |
-  //      0   1   2   3   4
-  //
-  //
-  // getPoint(2, 3) //=> D
-  //
   parseData(data){
     const dataArr = data.split("\n")
     this.roomDimensions = dataArr.shift().split(" "),
@@ -88,3 +67,42 @@ class Roomba {
 module.exports = {
   Roomba
 }
+
+//
+// const room = [
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0]
+// ]
+
+
+
+ // set room grid
+// 4 || 0 | 0 | 0 | 0 | 0 |
+// 3 || 0 | 0 | 0 | 0 | 0 |
+// 2 || 0 | 0 | 0 | 0 | 0 |
+// 1 || 0 | 0 | 0 | 0 | 0 |
+// 0 || 0 | 0 | 0 | 0 | 0 |
+//      0   1   2   3   4
+//
+//  // set hoover position
+// 4 || 0 | 0 | 0 | 0 | 0 |
+// 3 || 0 | 0 | 0 | 0 | 0 |
+// 2 || 0 | H | 0 | 0 | 0 |
+// 1 || 0 | 0 | 0 | 0 | 0 |
+// 0 || 0 | 0 | 0 | 0 | 0 |
+//      0   1   2   3   4
+//
+// // set dirt position
+// 4 || 0 | 0 | 0 | 0 | 0 |
+// 3 || 0 | 0 | D | 0 | 0 |
+// 2 || 0 | H | D | 0 | 0 |
+// 1 || 0 | 0 | 0 | 0 | 0 |
+// 0 || 0 | D | 0 | 0 | 0 |
+//      0   1   2   3   4
+//
+//
+// getPoint(2, 3) //=> D
+//
