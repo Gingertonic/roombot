@@ -1,13 +1,24 @@
 
 class Roomba {
-  // let room;
   constructor(data){
     this.parseData(data)
+    this.createRoom()
+    this.printRoom()
+    // this.populateRoom()
+    this.printData()
   }
 
-  hooverRoom(data){
-    parseData(data)
-    // printRoom(room)
+  createRoom(){
+    const { x, y } = this.getCoordArray(this.roomDimensions)
+    this.room = new Array(x).fill(new Array(y).fill(0))
+  }
+
+  // populateRoom(){
+  //   this.hooverCoords
+  // }
+
+  getCoordArray(coords){
+    return {x: parseInt(coords[0]), y: parseInt(coords[1])}
   }
 
   //
@@ -50,28 +61,28 @@ class Roomba {
   //
   parseData(data){
     const dataArr = data.split("\n")
-    this.roomCoords = dataArr.shift().split(" "),
+    this.roomDimensions = dataArr.shift().split(" "),
     this.hooverCoords = dataArr.shift().split(" "),
     this.dirtPatches = dataArr.filter(set => {return /\d/.test(set)}),
     this.directions = dataArr.filter(set => {return /[NESW]/.test(set)})
   }
 
   printData() {
-    console.log(this.roomCoords)
+    console.log(this.roomDimensions)
     console.log(this.hooverCoords)
     console.log(this.dirtPatches)
     console.log(this.directions)
+    console.log(this.room)
   }
-  //
-  //
-  // const printRoom = room => {
-  //   console.log(`4 || ${room[4][0]} | ${room[4][1]} | ${room[4][2]} | ${room[4][3]} | ${room[4][4]} |`)
-  //   console.log(`3 || ${room[3][0]} | ${room[3][1]} | ${room[3][2]} | ${room[3][3]} | ${room[3][4]} |`)
-  //   console.log(`2 || ${room[2][0]} | ${room[2][1]} | ${room[2][2]} | ${room[2][3]} | ${room[2][4]} |`)
-  //   console.log(`1 || ${room[1][0]} | ${room[1][1]} | ${room[1][2]} | ${room[1][3]} | ${room[1][4]} |`)
-  //   console.log(`0 || ${room[0][0]} | ${room[0][1]} | ${room[0][2]} | ${room[0][3]} | ${room[0][4]} |`)
-  //   console.log(`     0   1   2   3   4`)
-  // }
+
+  printRoom() {
+    console.log(`4 || ${this.room[4][0]} | ${this.room[4][1]} | ${this.room[4][2]} | ${this.room[4][3]} | ${this.room[4][4]} |`)
+    console.log(`3 || ${this.room[3][0]} | ${this.room[3][1]} | ${this.room[3][2]} | ${this.room[3][3]} | ${this.room[3][4]} |`)
+    console.log(`2 || ${this.room[2][0]} | ${this.room[2][1]} | ${this.room[2][2]} | ${this.room[2][3]} | ${this.room[2][4]} |`)
+    console.log(`1 || ${this.room[1][0]} | ${this.room[1][1]} | ${this.room[1][2]} | ${this.room[1][3]} | ${this.room[1][4]} |`)
+    console.log(`0 || ${this.room[0][0]} | ${this.room[0][1]} | ${this.room[0][2]} | ${this.room[0][3]} | ${this.room[0][4]} |`)
+    console.log(`     0   1   2   3   4`)
+  }
 }
 
 module.exports = {

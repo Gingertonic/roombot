@@ -8,5 +8,4 @@ const Tools = require('./hoover.js')
 fs.readFile('input.txt', 'utf8', function(err, data) {
     if (err) throw err;
     const roombot = new Tools.Roomba(data)
-    roombot.printData()
 });
