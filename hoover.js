@@ -7,7 +7,8 @@ class Roomba {
     this.addDirt()
     this.printRoom()
     this.cleanRoom()
-    // this.printRoom()
+    this.printRoom()
+    this.printResults()
   }
 
   createRoom(){
@@ -44,6 +45,7 @@ class Roomba {
     this.hooverCoords = dataArr.shift().split(" "),
     this.dirtPatches = dataArr.filter(set => {return /\d/.test(set)}),
     this.directions = dataArr.filter(set => {return /[NESW]/.test(set)})[0]
+    this.dirtStartCount = this.dirtPatches.length
   }
 
   printData() {
@@ -86,12 +88,29 @@ class Roomba {
     this.room[y][x] = 0;
   }
 
-  // printResults(){
-  //   const hooverLocation = findRoomba()
-  //   const cleanCount = this.cleanCount
-  //   console.log(hooverLocation)
-  //   console.log(cleanCount)
-  // }
+  countDirt() {
+    let dirtCount = 0
+    this.room.forEach(yRow => {
+      yRow.forEach(xPoint => {
+        xPoint === "D" ? dirtCount += 1 : null;
+      })
+    })
+    return dirtCount
+  }
+
+  findRoomba(){
+    let y = this.room.findIndex(yRow => yRow.includes("H"))
+    let x = this.room[y].findIndex(xPoint => xPoint === "H")
+    return [x, y]
+  }
+
+  printResults(){
+    const hooverLocation = this.findRoomba()
+    const dirtCount = this.countDirt()
+    const cleanCount = this.dirtStartCount - dirtCount
+    console.log(hooverLocation)
+    console.log(cleanCount)
+  }
 
 }
 
