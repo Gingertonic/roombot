@@ -1,3 +1,5 @@
+const Helpers = require('./helpers.js');
+
 class Roomba {
   constructor(data){
     this.parseData(data);
@@ -8,15 +10,15 @@ class Roomba {
 
   parseData(data){
     const dataArr = data.split("\n");
-    this.roomDimensions = dataArr.shift().split(" ");
-    this.roombaCoords = dataArr.shift().split(" ");
-    this.dirtPatches = dataArr.filter(set => {return /\d/.test(set)});
-    this.directions = dataArr.filter(set => {return /[NESW]/.test(set)})[0];
+    this.roomDimensions = Helpers.extractFirstElement(dataArr);
+    this.roombaCoords = Helpers.extractFirstElement(dataArr);
+    this.dirtPatches = Helpers.filterDataBy(dataArr, /\d/);
+    this.directions = Helpers.filterDataBy(dataArr, /[NESW]/)[0];
     this.dirtStartCount = this.dirtPatches.length;
   }
 
   createRoom(){
-    const { x, y } = this.parseCoordArray(this.roomDimensions);
+    const { x, y } = Helpers.parseCoordArray(this.roomDimensions);
     this.room = new Array();
     for (var i = 0; i < x; i++) {
       this.room[i] = new Array(y).fill(0);
@@ -24,22 +26,16 @@ class Roomba {
   }
 
   placeRoomba(coords){
-    const { x, y } = this.parseCoordArray(coords)
+    const { x, y } = Helpers.parseCoordArray(coords)
     this.room[y][x] = "H"
   }
 
   addDirt(){
     this.dirtPatches.forEach(d => {
       const dirtCoords = d.split(" ")
-      const { x, y } = this.parseCoordArray(dirtCoords);
+      const { x, y } = Helpers.parseCoordArray(dirtCoords);
       this.room[y][x] = "D";
     })
-  }
-
-  parseCoordArray(coords){
-    let x = parseInt(coords[0]);
-    let y = parseInt(coords[1]) === "0" ? 0 : parseInt(coords[1]);
-    return { x, y };
   }
 
   cleanRoom() {
@@ -47,7 +43,7 @@ class Roomba {
   }
 
   moveRoomba(direction) {
-    let { x, y } = this.parseCoordArray(this.findRoomba());
+    let { x, y } = Helpers.parseCoordArray(this.findRoomba());
     this.replaceRoomba({ x, y });
     switch(direction){
       case "N": y += 1; break;
@@ -56,6 +52,12 @@ class Roomba {
       case "W": x -= 1; break;
     }
     this.placeRoomba([x, y]);
+  }
+
+  findRoomba(){
+    let y = this.room.findIndex(yRow => yRow.includes("H"));
+    let x = this.room[y].findIndex(xPoint => xPoint === "H");
+    return [x, y];
   }
 
   replaceRoomba({ x, y }){
@@ -72,17 +74,11 @@ class Roomba {
     return dirtCount;
   }
 
-  findRoomba(){
-    let y = this.room.findIndex(yRow => yRow.includes("H"));
-    let x = this.room[y].findIndex(xPoint => xPoint === "H");
-    return [x, y];
-  }
-
   printResults(){
     const roombaLocation = this.findRoomba().join(" ");
     const dirtCount = this.countDirt();
     const cleanCount = this.dirtStartCount - dirtCount;
-    console.log( roombaLocation);
+    console.log(roombaLocation);
     console.log(cleanCount);
   }
 
