@@ -105,7 +105,7 @@ class Roomba {
   }
 
   printResults(){
-    const hooverLocation = this.findRoomba()
+    const hooverLocation = this.findRoomba().join(" ")
     const dirtCount = this.countDirt()
     const cleanCount = this.dirtStartCount - dirtCount
     console.log(hooverLocation)
