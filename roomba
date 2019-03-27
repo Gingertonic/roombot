@@ -3,7 +3,7 @@
 var fs = require('fs');
 const Appliances = require('./roomba.js');
 
-// console.clear();
+console.clear();
 
 fs.readFile('input.txt', 'utf8', function(err, data) {
     if (err) throw err;
